@@ -1,7 +1,7 @@
 import * as React from "react";
 import { I18nManager, View } from "react-native";
 import Animated from "react-native-reanimated";
-import { PanGestureHandler, State } from "react-native-gesture-handler";
+import { GestureHandlerRootView,PanGestureHandler, State } from "react-native-gesture-handler";
 import Ballon from "./Ballon";
 
 const {
@@ -301,88 +301,91 @@ class Slider extends React.Component<Props> {
     const thumbRenderer = renderThumbImage || this._renderThumbImage;
 
     return (
-      <PanGestureHandler
-        onGestureEvent={this.onGestureEvent}
-        onHandlerStateChange={this.onGestureEvent}
-        minDist={0}>
-        <Animated.View
-          style={[
-            {
-              flex: 1,
-              height: 30,
-              overflow: "visible",
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "#3330"
-            },
-            style
-          ]}
-          onLayout={this._onLayout}>
+      <GestureHandlerRootView>
+        <PanGestureHandler
+          onGestureEvent={this.onGestureEvent}
+          onHandlerStateChange={this.onGestureEvent}
+          minDist={0}>
           <Animated.View
-            style={{
-              width: "100%",
-              height: 5,
-              borderRadius: 2,
-              borderColor: borderColor,
-              overflow: "hidden",
-              borderWidth: 1,
-              backgroundColor: maximumTrackTintColor
-            }}>
+            style={[
+              {
+                flex: 1,
+                height: 30,
+                overflow: "visible",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#3330"
+              },
+              style
+            ]}
+            onLayout={this._onLayout}>
             <Animated.View
               style={{
-                backgroundColor: cacheTrackTintColor,
-                height: "100%",
-                width: this.cache_x,
-                [I18nManager.isRTL ? "right" : "left"]: 0,
+                width: "100%",
+                height: 5,
+                borderRadius: 2,
+                borderColor: borderColor,
+                overflow: "hidden",
+                borderWidth: 1,
+                backgroundColor: maximumTrackTintColor
+              }}>
+              <Animated.View
+                style={{
+                  backgroundColor: cacheTrackTintColor,
+                  height: "100%",
+                  width: this.cache_x,
+                  [I18nManager.isRTL ? "right" : "left"]: 0,
+                  position: "absolute"
+                }}
+              />
+              <Animated.View
+                style={{
+                  backgroundColor: minimumTrackTintColor,
+                  height: "100%",
+                  maxWidth: "100%",
+                  width: this.seek,
+                  [I18nManager.isRTL ? "right" : "left"]: 0,
+                  position: "absolute"
+                }}
+              />
+            </Animated.View>
+            <Animated.View
+              style={{
+                [I18nManager.isRTL ? "right" : "left"]: this.thumb,
                 position: "absolute"
-              }}
-            />
-            <Animated.View
-              style={{
+              }}>
+              {thumbRenderer({
                 backgroundColor: minimumTrackTintColor,
-                height: "100%",
-                maxWidth: "100%",
-                width: this.seek,
-                [I18nManager.isRTL ? "right" : "left"]: 0,
-                position: "absolute"
-              }}
-            />
-          </Animated.View>
-          <Animated.View
-            style={{
-              [I18nManager.isRTL ? "right" : "left"]: this.thumb,
-              position: "absolute"
-            }}>
-            {thumbRenderer({
-              backgroundColor: minimumTrackTintColor,
-              height: 15,
-              width: 15,
-              borderRadius: 30
-            })}
-          </Animated.View>
+                height: 15,
+                width: 15,
+                borderRadius: 30
+              })}
+            </Animated.View>
 
-          <Animated.View
-            style={{
-              position: "absolute",
-              [I18nManager.isRTL ? "right" : "left"]: -50,
-              width: BUBBLE_WIDTH,
-              opacity: this.height,
-              transform: [
-                {
-                  translateY: ballonTranslateY
-                },
-                {
-                  translateX: this.clamped_x
-                },
-                {
-                  scale: this.height
-                }
-              ]
-            }}>
-            {ballonRenderer({ text: ballon })}
+            <Animated.View
+              style={{
+                position: "absolute",
+                [I18nManager.isRTL ? "right" : "left"]: -50,
+                width: BUBBLE_WIDTH,
+                opacity: this.height,
+                transform: [
+                  {
+                    translateY: ballonTranslateY
+                  },
+                  {
+                    translateX: this.clamped_x
+                  },
+                  {
+                    scale: this.height
+                  }
+                ]
+              }}>
+              {ballonRenderer({ text: ballon })}
+            </Animated.View>
           </Animated.View>
-        </Animated.View>
-      </PanGestureHandler>
+        </PanGestureHandler>
+      </GestureHandlerRootView>
+
     );
   }
 }
