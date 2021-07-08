@@ -301,7 +301,7 @@ class Slider extends React.Component<Props> {
     const thumbRenderer = renderThumbImage || this._renderThumbImage;
 
     return (
-      <GestureHandlerRootView style={{flex:.8}}}>
+      <GestureHandlerRootView style={{flex:.8}}>
         <PanGestureHandler
           onGestureEvent={this.onGestureEvent}
           onHandlerStateChange={this.onGestureEvent}
